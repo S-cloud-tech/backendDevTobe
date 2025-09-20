@@ -1,12 +1,12 @@
 from .serializers import *
 from ..models import *
 from ..utils.trending_books import *
+from django.shortcuts import get_object_or_404
 from django.db.models import Avg, Count
 from rest_framework.views import APIView
-from rest_framework import viewsets, generics, status
-from rest_framework.decorators import action
+from rest_framework import viewsets, generics, status, permissions
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
-
 
 
 class CategoryAPI(viewsets.ModelViewSet):
@@ -37,6 +37,40 @@ class BookViewSet(viewsets.ModelViewSet):
     def trending_books():
         top_books = get_top_trending_books(limit=5)
         return Response(top_books)
+
+class MyBooksAPIView(generics.GenericAPIView):
+    serializer_class = BookSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        liked = request.user.liked_books.all()
+        saved = request.user.saved_books.all()
+        return Response({
+            "liked": BookSerializer(liked, many=True, context={"request": request}).data,
+            "saved": BookSerializer(saved, many=True, context={"request": request}).data,
+        })
+
+@api_view(["POST"])
+@permission_classes([permissions.IsAuthenticated])
+def like_book_api(request, pk):
+    book = get_object_or_404(Book, id=pk)
+    if request.user in book.liked_by.all():
+        book.liked_by.remove(request.user)
+        return Response({"status": "unliked"})
+    else:
+        book.liked_by.add(request.user)
+        return Response({"status": "liked"})
+
+@api_view(["POST"])
+@permission_classes([permissions.IsAuthenticated])
+def save_book_api(request, pk):
+    book = get_object_or_404(Book, id=pk)
+    if request.user in book.saved_by.all():
+        book.saved_by.remove(request.user)
+        return Response({"status": "unsaved"})
+    else:
+        book.saved_by.add(request.user)
+        return Response({"status": "saved"})
 
 class TrendingBooksAPIView(generics.ListAPIView):
     queryset = Book.objects.all().order_by("-read_count", "-rating", "-published_at")[:3]

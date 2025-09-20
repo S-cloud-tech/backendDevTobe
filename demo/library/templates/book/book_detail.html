@@ -10,7 +10,7 @@
     <p class="mt-2">{{ book.description }}</p>
     <p>{{ book.category }}</p>
     <div class="flex items-center gap-2 mt-2">
-        <span class="text-yellow-500">⭐ {{ book.rating|floatformat:1 }}</span>
+        <span class="text-yellow-500">⭐ {{ book.rating|floatformat:0.0 }}</span>
         <span>({{ book.reviews.count }} reviews)</span>
     </div>
 

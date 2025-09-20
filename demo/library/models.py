@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from datetime import date
 
 # Create your models here.
@@ -50,9 +51,11 @@ class Book(models.Model):
     description = models.TextField(blank=True, null=True)
     total_copies = models.PositiveIntegerField(default=1)
     is_available = models.BooleanField(default=True)
-    rating = models.DecimalField(max_digits=3, decimal_places=1, default=0.0)
+    rating = models.DecimalField(max_length=5, max_digits=3, decimal_places=1, default=0.0)
     read_count = models.PositiveIntegerField(default=0)  # how many times borrowed/read
     published_at = models.DateField(null=True, blank=True)  # for recency
+    # liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="liked_books", blank=True)
+    # saved_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="saved_books", blank=True)
 
     def average_rating(self):
         ratings = self.reviews.all().values_list("rating", flat=True)
@@ -105,7 +108,7 @@ class Review(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="reviews")
     # user = models.ForeignKey(User, on_delete=models.CASCADE) we will add this part after authentication
     review_text = models.TextField()
-    rating = models.PositiveSmallIntegerField(choices=[(i, i) for i in range(1, 6)])  # 1-5 stars
+    rating = models.DecimalField(max_length=5, max_digits=3, decimal_places=1, default=0.0)
     comment = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

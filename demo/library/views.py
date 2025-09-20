@@ -45,7 +45,6 @@ def home(request):
     }
     return render(request, template_name, context)
 
-
 def search(request):
     query = request.GET.get("q", "").strip()
     book_results = []
@@ -79,6 +78,22 @@ def book(request):
     books = Book.objects.all()
 
     return render(request, template_name, {"books": books})
+
+def like_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.user in book.liked_by.all():
+        book.liked_by.remove(request.user)  
+    else:
+        book.liked_by.add(request.user)  
+    return redirect("book_detail", pk=book.id)
+
+def save_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    if request.user in book.saved_by.all():
+        book.saved_by.remove(request.user)  
+    else:
+        book.saved_by.add(request.user) 
+    return redirect("book_detail", pk=book.id)
 
 class BookDetailView(DetailView):
     model = Book
@@ -125,8 +140,11 @@ def available_books(request):
     books = Book.objects.filter(is_available=True)
     return render(request, "book/available_books.html", {"books": books})
 
-def show_books():
-    pass
+def my_books(request):
+    liked = request.user.liked_books.all()
+    saved = request.user.saved_books.all()
+    return render(request, "book/my_books.html", {"liked": liked, "saved": saved})
+
 
 def edit_book(request, book_id):
     book = get_object_or_404(Book, pk=book_id)

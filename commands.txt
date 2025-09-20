@@ -11,7 +11,7 @@ pip install Django
 # To store packages for production environment
 pip freeze > requirements.txt
 
-# To update the packages
+# To update the packages(First run "pip install pur")
 pur -r requirements.txt
 
 # Creation django project
