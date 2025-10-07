@@ -1,0 +1,78 @@
+<!-- Notification Dropdown -->
+<el-dropdown class="relative flex items-center justify-between gap-4">
+  <!-- Bell Button -->
+  <button 
+    class="relative flex justify-center items-center p-2 text-white rounded-full hover:bg-gray-200 transition duration-200"
+  >
+    <i class="fa-regular fa-bell text-xl"></i>
+
+    {% if unread_count > 0 %}
+      <span id="notif-unread-count" class="absolute top-0 right-0 w-5 h-5 flex items-center justify-center text-xs bg-teal-500 text-white rounded-full">
+        {{ unread_count }}
+      </span>
+    {% else %}
+      <span id="notif-unread-count" class="hidden absolute top-0 right-0 w-5 h-5 flex items-center justify-center text-xs bg-teal-500 text-white rounded-full">0</span>
+    {% endif %}
+  </button>
+
+  <!-- Dropdown Menu -->
+  <el-menu 
+    anchor="bottom end" 
+    popover
+    class="min-w-96 origin-top-right rounded-xl bg-white shadow-lg outline outline-1 -outline-offset-1 outline-white/10 transition 
+           data-closed:scale-95 data-closed:transform data-closed:opacity-0 
+           data-enter:duration-100 data-enter:ease-out 
+           data-leave:duration-75 data-leave:ease-in"
+  >
+    <div class="flex flex-col w-full">
+      <!-- Header -->
+      <div class="flex justify-between items-center px-6 py-3 border-b border-slate-200">
+        <span class="font-semibold text-lg text-gray-800">Notifications</span>
+        <a href="#" class="text-teal-500 hover:text-teal-600 text-sm">Settings</a>
+      </div>
+
+      <!-- Notification Items -->
+      <div class="flex flex-col max-h-64 overflow-y-auto divide-y divide-slate-100">
+        {% if notifications %}
+          {% for notif in notifications %}
+          <div 
+            class="flex items-center gap-4 p-4 hover:bg-slate-50 cursor-pointer transition"
+          >
+            <img src="https://placehold.co/40x40" class="rounded-full" alt="User">
+            <div class="flex flex-col flex-1 text-left">
+              <div class="flex justify-between items-center">
+                <span class="text-gray-700 font-medium">
+                  {{ notif.title }}
+                </span>
+                {% if not notif.is_read %}
+                  <i class="fa-solid fa-circle text-teal-400 text-[8px]"></i>
+                {% endif %}
+              </div>
+              <p class="text-gray-500 text-sm mt-1">{{ notif.message|truncatewords:10 }}</p>
+              <span class="text-gray-400 text-xs mt-1">
+                {{ notif.created_at|timesince }} ago
+              </span>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="text-center text-gray-500 py-6">No new notifications</div>
+        {% endif %}
+      </div>
+
+      <!-- Footer -->
+      <div class="flex justify-between items-center px-6 py-3 border-t border-slate-200">
+        <form method="post" action="#">
+          {% csrf_token %}
+          <button type="submit" class="text-gray-500 text-sm hover:text-gray-700 transition">
+            Mark all as read
+          </button>
+        </form>
+        <a href="#" 
+           class="bg-teal-500 hover:bg-teal-600 text-white text-sm font-medium px-4 py-1.5 rounded-lg transition">
+          See all
+        </a>
+      </div>
+    </div>
+  </el-menu>
+</el-dropdown>

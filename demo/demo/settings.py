@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'library',
     'users',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -86,7 +87,7 @@ DATABASES = {
     }
 }
 
-# DATABASES['default'] = dj_database_url.parse(os.getenv('DB_URL'))
+DATABASES['default'] = dj_database_url.parse(os.getenv('DB_URL'))
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="flex flex-col flex-1 p-2 gap-3 rounded-xl">
+    <span class="text-2xl font-semibold">About</span>
+    <p class="text-gray-500">details about book</p>
+    <div class="flex flex-col flex-1 p-2 bg-white rounded-xl shadow-md">
+        <!-- Book details -->
+        <img src="{% if book.cover_image %}{{ book.cover_image.url }}{% else %}https://placehold.co/50x50{% endif %}"
+            class="w-48 h-64 object-cover rounded-lg mb-4" alt="{{ book.title }}">
+        <h1 class="text-2xl font-bold">{{ book.title }}</h1>
+        <p class="text-gray-600">By {{ book.author }}</p>
+        <p class="mt-2">{{ book.description }}</p>
+        <p>{{ book.category }}</p>
+        <div class="flex items-center gap-2 mt-2">
+            <span class="text-yellow-500">⭐ {{ book.rating|floatformat:1 }}</span>
+            <span>({{ book.reviews.count }} reviews)</span>
+        </div>
+
+
+        <!-- Review form -->
+        {% if user.is_authenticated %}
+        <form method="post" class="mt-4 border p-3 rounded-lg">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Submit Review</button>
+        </form>
+        {% else %}
+        <p class="mt-4 text-red-500">You must be logged in to leave a review.</p>
+        {% endif %}
+
+        <!-- Reviews list -->
+        <div class="mt-6">
+            <h2 class="text-xl font-semibold">Reviews</h2>
+            {% for review in book.reviews.all %}
+            <div class="border-b py-2">
+                <p class="font-medium">{{ review.user.username }} - ⭐ {{ review.rating }}</p>
+                <p class="text-gray-700">{{ review.comment }}</p>
+                <small class="text-gray-500">{{ review.created_at|date:"M d, Y H:i" }}</small>
+            </div>
+            {% empty %}
+            <p class="text-gray-500">No reviews yet. Be the first to review!</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
