@@ -10,7 +10,7 @@ from .utils.trending_books import *
 
 # Create your views here.
 def home(request):
-    template_name = "home/index.html"
+    template_name = "home/dashboard.html"
     books = Book.objects.all()
     category = Category.objects.all()
     top_books = get_top_trending_books(limit=5)

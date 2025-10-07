@@ -1,128 +1,335 @@
-{%extends 'base.html' %}
 {% load static %}
+<!-- Include Alpine.js -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script
 
-{% block content %}
-<div class="">
-    <span class="text-2xl font-semibold">Overview</span>
-    <p class="text-gray-500">Here's an Overview of your dashboard</p>
+<!-- Navbar -->
+<div class="flex justify-between items-center p-2 px-4 border-b-slate-300">
+  <div class="flex items-center w-full">
+    <!-- Brand -->
+    <a href="{% url 'home' %}" class="flex items-center gap-3 px-2 my-2 rounded-lg">
+      <i class="fa-solid fa-book text-teal-500 text-3xl"></i>
+      <span class="font-bold text-xl text-black">Dev <br/> Library</span>
+    </a>
 
-    <!-- cards -->
-    <div class="flex gap-3 my-2">
-        <div
-            class="flex flex-col justify-between flex-1 p-5 mb-4 rounded-xl 
-            shadow-md bg-white border border-slate-300 hover:shadow-lg transition-shadow">
-            <div class="flex items-center justify-between">
-                <div class="text-sm font-medium text-slate-500 tracking-wide uppercase">
-                    Total Books Read
-                </div>
-                <div class="text-slate-500"><i class="fa-solid fa-book"></i></div>
-            </div>
-            <div class="mt-4 text-xl font-semibold text-slate-800">
-                {{ total_read }} Books in Total
-            </div>
-        </div>
-        <div
-            class="flex flex-col justify-between flex-1 p-5 mb-4 rounded-xl 
-            shadow-md bg-white border border-slate-300 hover:shadow-lg transition-shadow">
-            <div class="flex items-center justify-between">
-                <div class="text-sm font-medium text-slate-500 tracking-wide uppercase">
-                    Total Books Borrowed
-                </div>
-                <div class="text-slate-500"><i class="fa-solid fa-book-open-reader"></i></div>
-            </div>
-            <div class="mt-4 text-xl font-semibold text-slate-800">
-                {{ total_borrowed }} Books in Total
-            </div>
-        </div>
-        <div
-            class="flex flex-col justify-between flex-1 p-5 mb-4 rounded-xl 
-            shadow-md bg-white border border-slate-300 hover:shadow-lg transition-shadow">
-            <div class="flex items-center justify-between">
-                <div class="text-sm font-medium text-slate-500 tracking-wide uppercase">
-                    Total Saved Books
-                </div>
-                <div class="text-slate-500"><i class="fa-solid fa-bookmark"></i></div>
-            </div>
-            <div class="mt-4 text-xl font-semibold text-slate-800">
-                {value} Books in Total
-            </div>
-        </div>
-        <div
-            class="flex flex-col justify-between flex-1 p-5 mb-4 rounded-xl 
-            shadow-md bg-white border border-slate-300 hover:shadow-lg transition-shadow">
-            <div class="flex items-center justify-between">
-                <div class="text-sm font-medium text-slate-500 tracking-wide uppercase">
-                    You've spent
-                </div>
-                <div class="text-slate-500"><i class="fa-solid fa-clock"></i></div>
-            </div>
-            <div class="mt-4 text-xl font-semibold text-slate-800">
-                {value} of reading so far
-            </div>
-        </div>
+    <!-- Navigation Links -->
+    <div class="flex ml-auto font-normal">
+      <a href="{% url 'home' %}" class="flex items-center gap-3 px-4 py-2 rounded-lg mb-2 text-gray-600 hover:bg-black hover:text-white">Home</a>
+      <a href="{% url 'category' %}" class="flex items-center gap-3 px-4 py-2 rounded-lg mb-2 text-gray-600 hover:bg-black hover:text-white">About</a>
+      <a href="{% url 'book' %}" class="flex items-center gap-3 px-4 py-2 rounded-lg mb-2 text-gray-600 hover:bg-black hover:text-white">Services</a>
+      <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg mb-2 text-gray-600 hover:bg-black hover:text-white">Programs</a>
+      <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg mb-2 text-gray-600 hover:bg-black hover:text-white">Research</a>
+      <a href="#" class="flex items-center gap-3 px-4 py-2 rounded-lg mb-2 text-gray-600 hover:bg-black hover:text-white">Contact</a>
+      <a href="{% url 'login' %}" class="flex items-center gap-3 px-4 py-2 rounded-lg mb-2 text-gray-600 hover:bg-black hover:text-white">Login</a>
+      <a href="{% url 'user_signup' %}" class="flex items-center gap-3 px-4 py-2 rounded-lg mb-2 bg-teal-500 text-white hover:bg-teal-600">Signup</a>
     </div>
-    <!-- 2nd layer (Trending Books) -->
-    <div class="flex gap-3">
-        <div class="flex flex-col flex-1 p-2 bg-white rounded-xl shadow-md">
-            <div class="flex justify-between my-1">
-                <span class="font-medium py-1">Trending Books</span>
-                <a href="{% url "book" %}" class="flex items-center gap-3 px-2 
-                    py-1 font-light rounded-lg bg-white border border-slate-300
-                    hover:bg-black hover:text-white">
-                    See All
-                </a>
-            </div>
-            <div class="flex gap-2">
-                {% for book in top_books|slice:":3" %}
-                <div class="flex flex-col w-45 border border-slate-500 rounded-lg gap-2 p-2 
-                    static block hover:shadow-lg hover:scale-105 transition-transform duration-200">
-                     <img src="{% if book.cover_image %}{{ book.cover_image.url }}
-                        {% else %}https://placehold.co/50x50{% endif %}" 
-                        alt="{{ book.title }}" 
-                        class="p-2 w-full h-48 shadow rounded-t-lg">
-                    <span>{{ book.title }}</span>
-                    <div class="flex justify-between p-1">
-                        <span class="text-yellow-500">⭐{{ book.rating }}</span>
-                        <span>like</span>
-                    </div>
-                </div>
-                {% empty %}
-                    <p>No Books available yet.</p>
-                {% endfor %}
-            </div>
-        </div>
-
-
-        {% comment %} Top Authors Section {% endcomment %}
-        <div class="flex flex-col flex-1 p-3 bg-white rounded-xl shadow-md">
-            <span class="font-medium py-1">Top Authors Read</span>
-            <div class="flex flex-col gap-2">
-                {% for author in top_authors.all|slice:":5" %}
-                <div class="flex justify-between border border-slate-300 p-1 rounded-lg">
-                    <img src="https://placehold.co/30x30" class="rounded-full my-1" alt="">
-                    <span class="px-2 py-1">{{ author.author|truncatechars:14 }}</span>
-                    <span class="px-2 py-1">{{ author.category }}</span>
-                    <span class="px-2 py-1 text-gray-500">{{ item.count }} books</span>
-                    <a href="{% url 'books_by_author' author.author %}" 
-                    class="flex items-center gap-3 px-2 py-1 rounded-lg bg-teal-500
-                    hover:bg-teal-600 text-white">
-                        See Books
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
-    <!-- based on Your books -->
-    <div class="flex flex-col flex-1 p-2 bg-white my-5 rounded-xl shadow-md">
-        <span class="font-medium py-1">Based on books you read</span>
-        <div class="flex gap-4">
-            <div class="flex flex-col border border-slate-300 rounded-lg">
-                <img width="150" src="https://placehold.co/50x50" alt="">
-                <span>Lorem ipsum </span>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
-{% endblock content %}
+
+<!-- Hero Section -->
+<section class="banner relative w-full min-h-[65vh] flex items-center bg-white px-12">
+  <div class="text-left max-w-3xl">
+    <h2 class="text-6xl text-black font-semibold pb-2 leading-tight">
+      Find <span class="text-teal-500">books</span> for <br />
+      both leisure <br />
+      and <span class="text-teal-500">learning</span>.
+    </h2>
+    <div class="flex flex-row justify-left gap-4 font-semibold text-sm">
+      <span>Read</span>
+      <span class="text-teal-500">•</span>
+      <span>Learn</span>
+      <span class="text-teal-500">•</span>
+      <span>Grow</span>
+    </div>
+    <p class="opacity-70 text-base leading-relaxed">
+      Blandit varius ut praesent nascetur eu penatibus nisi risus faucibus nunc ornare <br />
+      adipiscing nunc adipiscing. Condimentum turpis massa.
+    </p>
+  </div>
+</section>
+
+
+<!-- Categories Section -->
+<div class="flex flex-row bg-gray-100 w-full min-h-[15vh] p-6 justify-center gap-6 font-semibold text-4xl text-gray-700 items-center">
+  <span>Science</span>
+  <span class="text-teal-500">•</span>
+  <span>Horror</span>
+  <span class="text-teal-500">•</span>
+  <span>Education</span>
+  <span class="text-teal-500">•</span>
+  <span>Mystery</span>
+</div>
+
+<!-- Digital Content Section -->
+<section class="bg-teal-500 w-full py-12 text-center">
+  <!-- Heading -->
+  <div class="mb-10">
+    <h2 class="text-4xl font-bold text-white">Digital Content</h2>
+    <p class="text-white text-lg mt-2">Access anytime, anywhere</p>
+  </div>
+
+  <!-- Feature Boxes -->
+  <div class="flex justify-center flex-wrap gap-6 px-6">
+    <div class="features-box bg-white shadow-md rounded-xl p-6 w-[22%] min-w-[220px] text-center">
+      <i class="fa-solid fa-film text-teal-500 text-7xl mb-3"></i>
+      <h3 class="text-xl font-semibold text-teal-600">Movies & TVs</h3>
+    </div>
+
+    <div class="features-box bg-white shadow-md rounded-xl p-6 w-[22%] min-w-[220px] text-center">
+      <i class="fa-solid fa-music text-teal-500 text-7xl mb-3"></i>
+      <h3 class="text-xl font-semibold text-teal-600">Music</h3>
+    </div>
+
+    <div class="features-box bg-white shadow-md rounded-xl p-6 w-[22%] min-w-[220px] text-center">
+      <i class="fa-solid fa-folder text-teal-500 text-7xl mb-3"></i>
+      <h3 class="text-xl font-semibold text-teal-600">Digital Magazine</h3>
+    </div>
+
+    <div class="features-box bg-white shadow-md rounded-xl p-6 w-[22%] min-w-[220px] text-center">
+      <i class="fa-solid fa-book text-teal-500 text-7xl mb-3"></i>
+      <h3 class="text-xl font-semibold text-teal-600">E-Books</h3>
+    </div>
+  </div>
+</section>
+
+<!-- About Us Section -->
+<section class="bg-white w-full py-20 text-center">
+  <!-- Heading -->
+  <div class="mb-10">
+    <h2 class="text-4xl font-bold text-black mb-4">About Us</h2>
+  </div>
+
+  <div class="container mx-auto flex flex-col md:flex-row items-center justify-between gap-10 px-6">
+    
+    <!-- Images (Left Side) -->
+    <div class="relative w-full md:w-1/2 flex justify-center">
+      <!-- Main Image -->
+      <img 
+        src="" 
+        alt="Library interior" 
+        class="rounded-2xl shadow-lg w-[80%] h-auto object-cover"
+      />
+      <!-- Overlapping Image -->
+      <img 
+        src="" 
+        alt="Reading corner" 
+        class="absolute bottom-[-20px] right-[40px] w-[50%] rounded-xl shadow-md border-4 border-white"
+      />
+    </div>
+
+    <!-- About Text (Right Side) -->
+    <div class="text-center md:text-left w-full md:w-1/2">
+      <p class="text-gray-700 text-lg mb-6 leading-relaxed">
+        Welcome to <span class="text-teal-500 font-semibold">Dev Library</span> — your trusted source for 
+        books, e-learning, and digital content. We believe in fostering a culture 
+        of knowledge, creativity, and lifelong learning. Whether you're seeking 
+        scholarly resources or leisure reading, our library connects you to 
+        the world of ideas, anytime, anywhere.
+      </p>
+      <a href="{% url 'home' %}" 
+         class="inline-block bg-teal-500 text-white font-semibold px-6 py-3 rounded-full hover:bg-teal-600 transition-all duration-300">
+        Read More
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- Our Reach -->
+<section class="bg-teal-500 w-full py-12 text-center">
+  <!-- Heading -->
+  <div class="mb-10">
+    <h2 class="text-4xl font-bold text-white">Our Reach</h2>
+  </div>
+
+  <div class="flex flex-wrap justify-center gap-6 p-8">
+      <div class="features-box bg-white shadow-md rounded-xl p-6 w-[22%] text-center">
+          <i class="fa-solid fa-book text-teal-500 text-4xl"></i>
+          <h3 class="text-xl font-semibold mb-2 text-teal-600">2K+ Books</h3>
+      </div>
+
+      <div class="features-box bg-white shadow-md rounded-xl p-6 w-[22%] text-center">
+          <i class="fa-solid fa-users text-teal-500 text-4xl"></i>
+          <h3 class="text-xl font-semibold mb-2 text-teal-600">1K+ Users</h3>
+      </div>
+      
+      <div class="features-box bg-white shadow-md rounded-xl p-6 w-[22%] text-center">
+          <i class="fa-solid fa-layer-group text-teal-500 text-4xl"></i>
+          <h3 class="text-xl font-semibold mb-2 text-teal-600">20+ Categories</h3>
+      </div>
+  </div>
+</section>
+
+<!-- Popular Books Section -->
+<section class="bg-white w-full py-20 text-center">
+  <div class="mb-10">
+    <h2 class="text-4xl font-bold text-black">Popular Books Read</h2>
+  </div>
+
+  <!-- Book Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-6">
+    {% for book in top_books|slice:":3" %}
+      <!-- Book Cards -->
+      <div class="bg-gray-100 shadow-lg rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300">
+        <img src="{% if book.cover_image %}{{ book.cover_image.url }}
+                      {% else %}https://placehold.co/50x50{% endif %}" 
+                      alt="Book 1" class="w-full h-64 object-cover">
+        <div class="p-6 text-left">
+          <h3 class="text-2xl font-semibold text-teal-600 mb-1">{{ book.title }}</h3>
+          <p class="text-gray-500 mb-3 text-sm">{{ book.author }}</p>
+          <p class="text-gray-700 mb-4">
+            {{ book.description|truncatechars:30  }}
+          </p>
+          <a href="#" class="inline-block bg-teal-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-teal-600 transition">Read More</a>
+        </div>
+      </div>
+    {% empty %}
+      <p>No Books available yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+
+<!-- Featured Books Section -->
+<section class="bg-black w-full py-20 text-center text-white">
+  <div class="mb-12">
+    <h2 class="text-4xl font-bold">Featured Books</h2>
+  </div>
+
+  <!-- Slider Wrapper -->
+  <div 
+    x-data="{
+      books: [
+        {% for book in books %}
+          {
+            title: '{{ book.title|escapejs }}',
+            author: '{{ book.author|escapejs }}',
+            rating: '{{ book.rating }}',
+            description: '{{ book.description|truncatewords:25|escapejs }}',
+            image: '{% if book.cover_image %}{{ book.cover_image.url }}{% else %}https://placehold.co/600x400{% endif %}'
+          }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ],
+      activeIndex: 0,
+      next() { this.activeIndex = (this.activeIndex + 1) % this.books.length },
+      prev() { this.activeIndex = (this.activeIndex - 1 + this.books.length) % this.books.length },
+    }"
+    x-init="setInterval(() => next(), 6000)"
+    class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12 px-6 relative"
+  >
+
+    <!-- Image Slider -->
+    <div class="relative w-full md:w-1/2 h-[26rem] overflow-hidden rounded-2xl shadow-xl">
+      <template x-for="(book, index) in books" :key="index">
+        <div 
+          x-show="activeIndex === index"
+          x-transition
+          class="absolute inset-0"
+        >
+          <img :src="book.image" alt="" class="w-full h-full object-cover rounded-2xl">
+        </div>
+      </template>
+
+      <!-- Navigation Buttons -->
+      <button 
+        @click="prev" 
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 bg-teal-500 hover:bg-teal-600 text-white p-3 rounded-full shadow-md transition"
+      >
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <button 
+        @click="next" 
+        class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-teal-500 hover:bg-teal-600 text-white p-3 rounded-full shadow-md transition"
+      >
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <!-- Book Details -->
+    <div class="w-full md:w-1/2 text-left space-y-4">
+      <h3 class="text-3xl font-semibold text-teal-400" x-text="books[activeIndex].title"></h3>
+      <p class="text-lg text-gray-300">
+        <span class="font-medium">Author:</span> 
+        <span x-text="books[activeIndex].author"></span>
+      </p>
+      <p class="text-lg text-gray-300">
+        <span class="font-medium">Rating:</span> ⭐ 
+        <span x-text="books[activeIndex].rating"></span>
+      </p>
+      <p class="text-gray-400 leading-relaxed" x-text="books[activeIndex].description"></p>
+      <a href="#" class="inline-block bg-teal-500 hover:bg-teal-600 text-white font-semibold px-6 py-2 rounded-lg mt-4 transition">
+        Read Now
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- Reviews Section -->
+<section class="bg-gray-100 w-full py-20 text-center">
+  <div class="mb-12">
+    <h2 class="text-4xl font-bold text-black">What Our Readers Say</h2>
+    <p class="text-gray-600 text-lg mt-2">Real experiences from our community</p>
+  </div>
+
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-6">
+    {% for review in reviews %}
+    <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300">
+      <div class="flex flex-col items-center space-y-4">
+        <img 
+          src="{% if review.image %}{{ review.image.url }}{% else %}https://placehold.co/100x100{% endif %}" 
+          alt="{{ review.user.username }}" 
+          class="w-24 h-24 object-cover rounded-full border-4 border-teal-500 shadow"
+        >
+        <h3 class="text-xl font-semibold text-teal-600">
+          {{ review.user.get_full_name|default:review.user.username }}
+        </h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          “{{ review.content|truncatewords:25 }}”
+        </p>
+      </div>
+    </div>
+    {% empty %}
+    <p class="col-span-3 text-gray-500">No reviews available yet. Be the first to share your experience!</p>
+    {% endfor %}
+  </div>
+</section>
+
+
+
+<!-- Newsletter Section -->
+<section class="bg-black py-16 text-center">
+  <div class="max-w-2xl mx-auto px-4">
+    <!-- Heading -->
+    <h2 class="text-4xl font-bold text-white mb-6">
+      Subscribe to our Newsletter
+    </h2>
+
+    <!-- Description -->
+    <p class="text-gray-300 mb-8">
+      Get updates on new books, events, and digital content — straight to your inbox.
+    </p>
+
+    <!-- Subscription Form -->
+    <form method="post" action="#" class="flex items-center justify-between bg-white rounded-full shadow-md overflow-hidden w-full max-w-lg mx-auto">
+      {% csrf_token %}
+      <input 
+        type="email"
+        name="email"
+        placeholder="Enter your email address"
+        required
+        class="w-full px-6 py-3 text-gray-800 outline-none"
+      />
+      <button 
+        type="submit"
+        class="bg-teal-500 text-white px-6 py-3 font-semibold hover:bg-teal-600 transition-all"
+      >
+        Subscribe
+      </button>
+    </form>
+  </div>
+</section>
+
+
+

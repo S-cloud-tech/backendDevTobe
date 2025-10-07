@@ -57,6 +57,12 @@ class Book(models.Model):
     # liked_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="liked_books", blank=True)
     # saved_by = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="saved_books", blank=True)
 
+
+    class Meta:
+        permissions = [
+            ("can_save_book", "Can_save_books")
+        ]
+
     def average_rating(self):
         ratings = self.reviews.all().values_list("rating", flat=True)
         return round(sum(ratings) / len(ratings), 1) if ratings else 0
